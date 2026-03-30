@@ -1,0 +1,75 @@
+CortexLab
+Copyright 2026 CortexLab Contributors
+
+This project is a derivative work built upon TRIBE v2 by Meta Platforms, Inc.
+
+================================================================================
+
+TRIBE v2
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+https://github.com/facebookresearch/tribev2
+
+The following source files in this repository are derived from TRIBE v2:
+  - src/cortexlab/core/model.py (modified: added return_attn, compile_backbone)
+  - src/cortexlab/data/loader.py (original: tribev2/utils.py)
+  - src/cortexlab/data/transforms.py (original: tribev2/eventstransforms.py)
+  - src/cortexlab/data/fmri.py (original: tribev2/utils_fmri.py)
+  - src/cortexlab/data/studies/* (original: tribev2/studies/*)
+  - src/cortexlab/training/experiment.py (original: tribev2/main.py)
+  - src/cortexlab/training/pl_module.py (original: tribev2/pl_module.py)
+  - src/cortexlab/inference/predictor.py (original: tribev2/demo_utils.py)
+  - src/cortexlab/viz/* (original: tribev2/plotting/*)
+
+The pretrained model weights are hosted by Meta at:
+  https://huggingface.co/facebook/tribev2
+
+================================================================================
+
+neuralset (v0.0.2)
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licensed under CC BY-NC 4.0
+
+neuraltrain (v0.0.2)
+Copyright (c) Meta Platforms, Inc. and affiliates.
+Licensed under CC BY-NC 4.0
+
+================================================================================
+
+Third-party dependencies and their licenses:
+
+  PyTorch (torch)          - BSD 3-Clause
+  Transformers             - Apache 2.0
+  HuggingFace Hub          - Apache 2.0
+  x_transformers           - MIT
+  einops                   - MIT
+  NumPy                    - BSD 3-Clause
+  pandas                   - BSD 3-Clause
+  PyYAML                   - MIT
+  MoviePy                  - MIT
+  gTTS                     - MIT
+  langdetect               - Apache 2.0
+  spaCy                    - MIT
+  SoundFile                - BSD 3-Clause
+  julius                   - MIT
+  pydantic                 - MIT
+  requests                 - Apache 2.0
+  tqdm                     - MIT / MPL 2.0
+  SciPy                    - BSD 3-Clause
+  nilearn                  - BSD 3-Clause
+  MNE-Python               - BSD 3-Clause
+  PyVista                  - MIT
+  matplotlib               - PSF / BSD
+  PyTorch Lightning        - Apache 2.0
+  Weights & Biases         - MIT
+
+================================================================================
+
+LLaMA 3.2-3B (used as text feature extractor by the pretrained TRIBE v2 model)
+Copyright (c) Meta Platforms, Inc.
+Licensed under the Meta Llama 3.2 Community License Agreement
+https://llama.meta.com/llama3_2/license/
+
+Users must independently accept Meta's LLaMA license to use the pretrained
+TRIBE v2 model for text feature extraction. CortexLab does not redistribute
+LLaMA weights.

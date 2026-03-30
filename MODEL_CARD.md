@@ -1,8 +1,28 @@
+---
+license: cc-by-nc-4.0
+library_name: cortexlab
+tags:
+  - neuroscience
+  - fmri
+  - brain-encoding
+  - multimodal
+  - tribe-v2
+  - brain-alignment
+  - cognitive-load
+language:
+  - en
+pipeline_tag: other
+---
+
 # CortexLab
 
 Enhanced multimodal fMRI brain encoding toolkit built on [Meta's TRIBE v2](https://github.com/facebookresearch/tribev2).
 
 CortexLab extends TRIBE v2 with streaming inference, interpretability tools, cross-subject adaptation, brain-alignment benchmarking, and cognitive load scoring.
+
+## What This Repo Contains
+
+This is a **code-only** repository. It does not contain pretrained weights. The pretrained TRIBE v2 model is hosted by Meta at [`facebook/tribev2`](https://huggingface.co/facebook/tribev2).
 
 ## Features
 
@@ -17,22 +37,18 @@ CortexLab extends TRIBE v2 with streaming inference, interpretability tools, cro
 
 ## Prerequisites
 
-The pretrained TRIBE v2 model uses **LLaMA 3.2-3B** as its text encoder. You must accept Meta's LLaMA license before using it:
+The pretrained TRIBE v2 model uses **LLaMA 3.2-3B** as its text encoder. You must:
 
-1. Visit [llama.meta.com](https://llama.meta.com/) and accept the license
+1. Accept Meta's LLaMA license at [llama.meta.com](https://llama.meta.com/)
 2. Request access on [HuggingFace](https://huggingface.co/meta-llama/Llama-3.2-3B)
 3. Authenticate: `huggingface-cli login`
 
 ## Installation
 
 ```bash
-pip install -e "."
-
-# With optional dependencies
-pip install -e ".[plotting]"       # Brain visualization
-pip install -e ".[training]"       # PyTorch Lightning training
-pip install -e ".[analysis]"       # RSA/CKA benchmarking (scipy)
-pip install -e ".[dev]"            # Testing and linting
+git clone https://github.com/siddhant-rajhans/cortexlab.git
+cd cortexlab
+pip install -e ".[analysis]"
 ```
 
 ## Quick Start
@@ -55,7 +71,6 @@ from cortexlab.analysis import BrainAlignmentBenchmark
 bench = BrainAlignmentBenchmark(brain_predictions, roi_indices=roi_indices)
 result = bench.score_model(clip_features, method="rsa")
 print(f"Alignment: {result.aggregate_score:.3f}")
-print(f"V1 alignment: {result.roi_scores['V1']:.3f}")
 ```
 
 ### Cognitive Load Scoring
@@ -66,40 +81,18 @@ from cortexlab.analysis import CognitiveLoadScorer
 scorer = CognitiveLoadScorer(roi_indices)
 result = scorer.score_predictions(predictions)
 print(f"Overall load: {result.overall_load:.2f}")
-print(f"Visual complexity: {result.visual_complexity:.2f}")
-print(f"Language processing: {result.language_processing:.2f}")
 ```
 
-### Streaming Inference
+## Compute Requirements
 
-```python
-from cortexlab.inference import StreamingPredictor
+| Component | VRAM | Notes |
+|---|---|---|
+| TRIBE v2 encoder | ~1 GB | Small (1.15M params) |
+| LLaMA 3.2-3B (text) | ~8 GB | Features cached after first run |
+| V-JEPA2 (video) | ~6 GB | Features cached after first run |
+| Wav2Vec-BERT (audio) | ~3 GB | Features cached after first run |
 
-sp = StreamingPredictor(model._model, window_trs=40, step_trs=1, device="cuda")
-for features in live_feature_stream():
-    pred = sp.push_frame(features)
-    if pred is not None:
-        visualize(pred)  # (n_vertices,)
-```
-
-### Modality Attribution
-
-```python
-from cortexlab.inference import ModalityAttributor
-
-attributor = ModalityAttributor(model._model, roi_indices=roi_indices)
-scores = attributor.attribute(batch)
-# scores["text"], scores["audio"], scores["video"] -> (n_vertices,)
-```
-
-### Cross-Subject Adaptation
-
-```python
-from cortexlab.core.subject import SubjectAdapter
-
-adapter = SubjectAdapter.from_ridge(model._model, calibration_loader, regularization=1e-3)
-new_subject_id = adapter.inject_into_model(model._model)
-```
+Minimum: 16 GB VRAM GPU for full inference. CPU works but is slow. Analysis tools (benchmark, cognitive load) work with zero GPU on precomputed predictions.
 
 ## Architecture
 
@@ -113,24 +106,26 @@ src/cortexlab/
   viz/           Brain surface visualization (nilearn, pyvista)
 ```
 
-## Development
-
-```bash
-pip install -e ".[dev]"
-pytest tests/ -v
-ruff check src/ tests/
-```
-
 ## License
 
-CC BY-NC 4.0 (inherited from TRIBE v2). See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+CC BY-NC 4.0 (non-commercial use only), inherited from TRIBE v2.
 
-This project is for **non-commercial use only**. The pretrained weights are hosted by Meta at [facebook/tribev2](https://huggingface.co/facebook/tribev2) and are not redistributed by this project.
+This project does not redistribute pretrained weights. Users must download weights directly from [`facebook/tribev2`](https://huggingface.co/facebook/tribev2).
 
-## Acknowledgements
+## Citation
 
-Built on [TRIBE v2](https://github.com/facebookresearch/tribev2) by Meta FAIR.
+If you use CortexLab in your research, please cite the original TRIBE v2 paper:
 
-> d'Ascoli et al., "A foundation model of vision, audition, and language for in-silico neuroscience", 2026.
+```bibtex
+@article{dascoli2026tribe,
+  title={A foundation model of vision, audition, and language for in-silico neuroscience},
+  author={d'Ascoli, St{\'e}phane and others},
+  year={2026}
+}
+```
 
-See [NOTICE](NOTICE) for full attribution and third-party licenses.
+## Links
+
+- **GitHub**: [siddhant-rajhans/cortexlab](https://github.com/siddhant-rajhans/cortexlab)
+- **TRIBE v2**: [facebookresearch/tribev2](https://github.com/facebookresearch/tribev2)
+- **Pretrained weights**: [facebook/tribev2](https://huggingface.co/facebook/tribev2)
